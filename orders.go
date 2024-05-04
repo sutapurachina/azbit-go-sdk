@@ -66,8 +66,9 @@ type Order struct {
 	CurrencyPairCode string  `json:"currencyPairCode"`
 }
 
-func (azbit *AzBitClient) OrderBook(currencyPairCode string) (levels []BookLevel, err error) {
+func (azbit *AzBitClient) OrderBook(base, quote string) (levels []BookLevel, err error) {
 	url := baseApiUrl + "/api/orderbook/"
+	currencyPairCode := symbol(base, quote)
 	query := fmt.Sprintf("?currencyPairCode=%s", currencyPairCode)
 	req, err := http.NewRequest("GET", url+query, nil)
 	if err != nil {
@@ -109,11 +110,11 @@ func symbol(base, quote string) string {
 	return base + "_" + quote
 }
 
-func (azbit *AzBitClient) PostOrder(side Side, currencyPairCode string, amount, price float64) (ID string, err error) {
+func (azbit *AzBitClient) PostOrder(side Side, base, quote string, amount, price float64) (ID string, err error) {
 	return azbit.postOrder(
 		&PostOrderRequest{
 			OrderSide:        side,
-			CurrencyPairCode: currencyPairCode,
+			CurrencyPairCode: symbol(base, quote),
 			Amount:           amount,
 			Price:            price,
 		})
@@ -179,7 +180,6 @@ func (azbit *AzBitClient) CancelOrder(orderId string) (err error) {
 		return
 	}
 
-	fmt.Println(respBody, err)
 	if response.Succeeded {
 		return nil
 	}
@@ -190,5 +190,4 @@ func (azbit *AzBitClient) CancelOrder(orderId string) (err error) {
 	errorStr += response.LogicError
 	err = errors.New(errorStr)
 	return
-
 }

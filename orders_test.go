@@ -8,7 +8,7 @@ import (
 var azbit = NewAzBitClient("PSgZiaxoQ2GSJ2GrZI4MrNZbqUeLDkkTuQO6mA", "u2OSYn4ypAyo3VgT5hzEIunsfS9KV2YKyCnIu8I4Vw7CJcMSrk7vFevkhU68frXStTP8lQ")
 
 func TestAzBitClient_OrderBook(t *testing.T) {
-	levels, err := azbit.OrderBook("SHIB_USDT")
+	levels, err := azbit.OrderBook("SHIB", "USDT")
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -29,7 +29,7 @@ func TestAzBitClient_MyOrders(t *testing.T) {
 }
 
 func TestAzBitClient_PostOrder(t *testing.T) {
-	id, err := azbit.PostOrder(Buy, "BTC_USDT", 0.000186, 59000)
+	id, err := azbit.PostOrder(Buy, "BTC", "USDT", 0.000186, 59000)
 	if err != nil {
 		fmt.Println(err)
 	}
@@ -37,7 +37,7 @@ func TestAzBitClient_PostOrder(t *testing.T) {
 }
 
 func TestAzBitClient_CancelOrder(t *testing.T) {
-	err := azbit.CancelOrder("3db64569-5368-40a4-b257-6925f4dd1150")
+	err := azbit.CancelOrder("cbd8bd76-1ba3-4b00-94c9-5cfc40406cfa")
 	if err != nil {
 		fmt.Println(err)
 	}
