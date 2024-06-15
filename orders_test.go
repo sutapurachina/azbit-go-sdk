@@ -8,18 +8,20 @@ import (
 var azbit = NewAzBitClient("PSgZiaxoQ2GSJ2GrZI4MrNZbqUeLDkkTuQO6mA", "u2OSYn4ypAyo3VgT5hzEIunsfS9KV2YKyCnIu8I4Vw7CJcMSrk7vFevkhU68frXStTP8lQ")
 
 func TestAzBitClient_OrderBook(t *testing.T) {
-	levels, err := azbit.OrderBook("SHIB", "USDT")
+	levels, err := azbit.OrderBook("SNX", "USDT")
 	if err != nil {
 		fmt.Println(err)
 	}
 
 	for _, level := range levels {
-		fmt.Println(level)
+		if level.IsBid {
+			fmt.Println(level.Price)
+		}
 	}
 }
 
 func TestAzBitClient_MyOrders(t *testing.T) {
-	orders, err := azbit.MyOrders("BTC", "USDT", "all")
+	orders, err := azbit.MyOrders("BTС", "USDT", "all")
 	if err != nil {
 		fmt.Println(err)
 	}

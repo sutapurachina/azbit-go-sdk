@@ -102,6 +102,10 @@ func (azbit *AzBitClient) MyOrders(base, quote, status string) (orders []Order, 
 	if err != nil {
 		return
 	}
+	err = checkHTTPStatus(resp, http.StatusOK)
+	if err != nil {
+		return nil, fmt.Errorf("%v - %s, %s", err, resp.Status, string(respBody))
+	}
 	err = json.Unmarshal(respBody, &orders)
 	return
 }
@@ -137,6 +141,13 @@ func (azbit *AzBitClient) postOrder(postOrderRequest *PostOrderRequest) (ID stri
 		return
 	}
 	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return
+	}
+	err = checkHTTPStatus(resp, http.StatusOK)
+	if err != nil {
+		return "", fmt.Errorf("%v - %s, %s", err, resp.Status, string(respBody))
+	}
 	response := PostOrderResponse{}
 	err = json.Unmarshal(respBody, &response)
 	if err != nil {
@@ -173,6 +184,10 @@ func (azbit *AzBitClient) CancelOrder(orderId string) (err error) {
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return
+	}
+	err = checkHTTPStatus(resp, http.StatusOK)
+	if err != nil {
+		return fmt.Errorf("%v - %s, %s", err, resp.Status, string(respBody))
 	}
 	response := CancelOrderResponse{}
 	err = json.Unmarshal(respBody, &response)

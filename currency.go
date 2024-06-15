@@ -2,6 +2,7 @@ package azbit_go_sdk
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 )
@@ -26,6 +27,13 @@ func (azbit *AzBitClient) Currencies() (currencies []CurrencyInfo, err error) {
 		return
 	}
 	respBody, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	err = checkHTTPStatus(resp, http.StatusOK)
+	if err != nil {
+		return nil, fmt.Errorf("%v - %s, %s", err, resp.Status, string(respBody))
+	}
 	err = json.Unmarshal(respBody, &currencies)
 	return
 }
